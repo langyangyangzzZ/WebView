@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+            <meta name="viewport"
+                content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+                <meta content="yes" name="apple-mobile-web-app-capable" />
+                <meta content="yes" name="apple-touch-fullscreen" />
+                <meta content="telephone=no,email=no" name="format-detection" />
+                <meta content="maximum-dpr=2" name="flexible" />
+                <meta content="modeName=750-12" name="grid" />
+                <title>Title</title>
+                <link rel="stylesheet" href="style.css?v=1.0">
+                    <script src="./js/common.js"></script>
+                    <style>
+                        #container{
+                            height: 100vh;
+                            /*padding: 20px 0;*/
+                            box-sizing: border-box;
+                            overflow: hidden;
+                            /*max-height: 400px;*/
+                            
+                        }
+                    </style>
+    </head>
+    <body onLoad="javascript:document.yourFormName.reset()">
+        <div id="xAxisData"></div>
+        <div id="container"></div>
+        <script src="js/jquery.min.js"></script>
+        <script src="echarts.js"></script>
+        
+        <script type="text/javascript" src="echarts-2/echarts-gl.min.js?v=1.0"></script>
+        <script type="text/javascript" src="echarts-2/ecStat.min.js?v=1.0"></script>
+        <script type="text/javascript" src="echarts-2/dataTool.min.js?v=1.0"></script>
+        <script>
+            
+            var option = null;
+            var xAxisData;
+            var valueDate;
+            var u = navigator.userAgent;
+            var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+            var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                                  function setXAxisData(xAxisDat){
+                                  xAxisData = xAxisDat;
+                                  // $('#xAxisData').append('x轴数据加载完成'+Date.parse(new Date())+'<br>')
+                                  
+                                  }
+                                  //function setXAxisData(xAxisDat){
+                                  //xAxisData = xAxisDat;
+                                  //$('#xAxisData').append('x轴数据加载完成'+Date.parse(new Date())+'<br>')
+                                  //}
+                                  function setValueDate(valueDat){
+                                  valueDate = valueDat;
+                                  }
+                                  function changeDate(date){
+                                  var thisDate = date.split(' ');
+                                  var Ymd = thisDate[0];
+                                  var YmdDate = thisDate[0].split('-');
+                                  return YmdDate[1]+'-'+YmdDate[2];
+                                  }
+                                  function update(xAxisDat,valueDat){
+                                  var dom = document.getElementById("container");
+                                  var myChart = echarts.init(dom);
+                                  // if(isAndroid) return xAxisDat;
+                                  // $('#xAxisData').append('画图操作'+Date.parse(new Date())+'<br>')
+                                  var dateArr = xAxisData;
+                                  var balanceArr = valueDate;
+                                  var min =  arrMinNum(balanceArr);
+                                  var max =  arrMaxNum(balanceArr);
+                                  var option = {
+                                  // title: {
+                                  //     text: 'Beijing AQI'
+                                  // },
+                                  grid: {
+                                  // x: '15%',
+                                  // y: '10%',
+                                  top:'15px',
+                                  bottom:'25px',
+                                  left:'35px',
+                                  right: '15px'
+                                  },
+                                  color:['rgb(69,193,120)'],
+                                  tooltip: {
+                                  trigger: 'axis'
+                                  },
+                                  xAxis: {
+                                  type: 'category',
+                                  data: dateArr,
+                                  axisLine:{
+                                  lineStyle:{
+                                  color:'#e4e4e4',
+                                  width:1
+                                  },
+                                  },
+                                  axisLabel: {
+                                  show: true,
+                                  textStyle: {
+                                  fontSize:'8',
+                                  color:'#9b9b9b',
+                                  },
+                                  showMaxLabel: true
+                                  },
+                                  splitLine:{
+                                  show: true,
+                                  lineStyle:{
+                                  color: ['#e4e4e4'],
+                                  width: 1,
+                                  type: 'solid'
+                                  }
+                                  
+                                  },
+                                  },
+                                  yAxis: {
+                                  
+                                  type: 'value',
+                                  min:  Math.floor((min - (max-min)*0.3)*10)/10,
+                                  //max: Math.round(max + (max-min)*0.3),
+                                  //splitNumber:5,
+                                  splitLine: {
+                                  
+                                  show: true,
+                                  lineStyle:{
+                                  color: ['#e4e4e4'],
+                                  width: 1,
+                                  type: 'solid'
+                                  }
+                                  },
+                                  axisLabel: {
+                                  show: true,
+                                  textStyle: {
+                                  fontSize:'8',
+                                  color:'#9b9b9b',
+                                  } 
+                                  },
+                                  axisLine:{
+                                  lineStyle:{
+                                  color:'#e4e4e4',
+                                  width:1
+                                  }
+                                  }
+                                  },
+                                  // toolbox: {
+                                  //     left: 'center',
+                                  //     feature: {
+                                  //         dataZoom: {
+                                  //             yAxisIndex: 'none'
+                                  //         },
+                                  //         restore: {},
+                                  //         saveAsImage: {}
+                                  //     }
+                                  // },
+                                  dataZoom: [{
+                                             show : false,
+                                             // start: 30,
+                                             // height: 40,
+                                             // handleSize: 40
+                                             }, {
+                                             type: 'inside'
+                                             }],
+                                  // visualMap: {
+                                  //     top: 10,
+                                  //     right: 10,
+                                  //     pieces: [{
+                                  //         gt: 0,
+                                  //         lte: 50,
+                                  //         color: '#096'
+                                  //     }, {
+                                  //         gt: 50,
+                                  //         lte: 100,
+                                  //         color: '#ffde33'
+                                  //     }, {
+                                  //         gt: 100,
+                                  //         lte: 150,
+                                  //         color: '#ff9933'
+                                  //     }, {
+                                  //         gt: 150,
+                                  //         lte: 200,
+                                  //         color: '#cc0033'
+                                  //     }, {
+                                  //         gt: 200,
+                                  //         lte: 300,
+                                  //         color: '#660099'
+                                  //     }, {
+                                  //         gt: 300,
+                                  //         color: '#7e0023'
+                                  //     }],
+                                  //     outOfRange: {
+                                  //         color: '#999'
+                                  //     }
+                                  // },
+                                  series: {
+                                  // name: 'Beijing AQI',
+                                  type: 'line',
+                                  data: balanceArr,
+                                  smooth: true,
+                                  // markLine: {
+                                  //     silent: true,
+                                  //     data: [{
+                                  //         yAxis: 50
+                                  //     }, {
+                                  //         yAxis: 100
+                                  //     }, {
+                                  //         yAxis: 150
+                                  //     }, {
+                                  //         yAxis: 200
+                                  //     }, {
+                                  //         yAxis: 300
+                                  //     }]
+                                  // }
+                                  }
+                                  };
+                                  myChart.setOption(option, true);
+                                  }
+                                  
+                                  if (option && typeof option === "object") {
+                                  myChart.setOption(option, true);
+                                  }
+                                  
+                                  function arrMaxNum(arr){
+                                  let maxNum = -Infinity;
+                                  for (let i = 0; i < arr.length; i++) {
+                                  parseFloat(arr[i])>parseFloat(maxNum) ? maxNum =arr[i] : null;
+                                  };
+                                  return maxNum;
+                                  }
+                                  
+                                  function arrMinNum(arr){
+                                  let minNum = Infinity;
+                                  for (let i = 0; i < arr.length; i++) {
+                                  parseFloat(arr[i])<parseFloat(minNum) ? minNum =arr[i] : null;
+                                  };
+                                  
+                                  return minNum;
+                                  }
+            </script>
+    </body>
+</html>

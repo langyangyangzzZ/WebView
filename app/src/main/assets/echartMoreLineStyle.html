@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="telephone=no,email=no" name="format-detection" />
+    <meta content="maximum-dpr=2" name="flexible" />
+    <meta content="modeName=750-12" name="grid" />
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css?v=1.0">
+    <script src="./js/common.js"></script>
+    <style>
+        #container{
+            height: 100vh;
+            /*padding: 20px 0;*/
+            box-sizing: border-box;
+            overflow: hidden;
+            /*max-height: 400px;*/
+
+        }
+    </style>
+</head>
+<body onLoad="javascript:document.yourFormName.reset()">
+<div id="xAxisData"></div>
+<div id="container"></div>
+<script src="js/jquery.min.js"></script>
+<script src="echarts.js"></script>
+
+<script type="text/javascript" src="echarts-2/echarts-gl.min.js?v=1.0"></script>
+<script type="text/javascript" src="echarts-2/ecStat.min.js?v=1.0"></script>
+<script type="text/javascript" src="echarts-2/dataTool.min.js?v=1.0"></script>
+<script>
+
+    var option = null;
+    var xAxisData;
+    var valueDate;
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    function setXAxisData(xAxisDat){
+        xAxisData = xAxisDat;
+        // $('#xAxisData').append('x轴数据加载完成'+Date.parse(new Date())+'<br>')
+
+    }
+    //function setXAxisData(xAxisDat){
+    //xAxisData = xAxisDat;
+    //$('#xAxisData').append('x轴数据加载完成'+Date.parse(new Date())+'<br>')
+    //}
+
+    function setLowValueDate(valueDat){
+        valueDateLow = valueDat;
+    }
+    function setMidValueDate(valueDat){
+        valueDateMid = valueDat;
+    }
+    function setHigValueDate(valueDat){
+        valueDateHig = valueDat;
+    }
+    function changeDate(date){
+        var thisDate = date.split(' ');
+        var Ymd = thisDate[0];
+        var YmdDate = thisDate[0].split('-');
+        return YmdDate[1]+'-'+YmdDate[2];
+    }
+    function update(xAxisDat){
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        // if(isAndroid) return xAxisDat;
+        // $('#xAxisData').append('画图操作'+Date.parse(new Date())+'<br>')
+        var dateArr = xAxisData;
+        var balanceArrLow = valueDateLow;
+        var balanceArrMid = valueDateMid;
+        var balanceArrHig = valueDateHig;
+        var c = balanceArrLow.concat(balanceArrMid);
+        var d = c.concat(balanceArrHig);
+        console.log(d)
+        var min =  arrMinNum(d);
+        var max =  arrMaxNum(d);
+        var option = {
+            grid: {
+                top:'15px',
+                bottom:'35px',
+                left:'30px',
+                right: '15px'
+            },
+            color:['rgb(69,193,120)'],
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                data: dateArr,
+                axisLine:{
+                    lineStyle:{
+                        color:'#e4e4e4',
+                        width:1
+                    },
+                },
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        fontSize:'15',
+                        color:'#9b9b9b',
+                    },
+                    showMaxLabel: true
+                },
+                splitLine:{
+                    show: true,
+                    lineStyle:{
+                        color: ['#e4e4e4'],
+                        width: 1,
+                        type: 'solid'
+                    }
+
+                },
+            },
+            yAxis:
+                {
+                    type: 'value',
+                    name: '低',
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: ['#e4e4e4'],
+                            width: 1,
+                            type: 'solid'
+                        }
+                    },
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            fontSize: '8',
+                            color: '#9b9b9b',
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e4e4e4',
+                            width: 1
+                        }
+                    }
+                }
+            ,
+            dataZoom: [{
+                show : false,
+            }, {
+                type: 'inside'
+            }],
+
+            series: [
+                {
+                    type: 'line',
+                    data: balanceArrLow,
+                    smooth: true,
+                    color: 'green',
+                    name: '低'
+                },
+                {
+                    type: 'line',
+                    data: balanceArrMid,
+                    smooth: true,
+                    color: '#EFE175',
+                    name: '中'
+                },
+                {
+                    type: 'line',
+                    data: balanceArrHig,
+                    smooth: true,
+                    color: 'red',
+                    name: '高'
+                }]
+        };
+        myChart.setOption(option, true);
+    }
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+    function arrMaxNum(arr){
+        let maxNum = -Infinity;
+        for (let i = 0; i < arr.length; i++) {
+            parseFloat(arr[i])>parseFloat(maxNum) ? maxNum =arr[i] : null;
+        };
+        return maxNum;
+    }
+
+    function arrMinNum(arr){
+        let minNum = Infinity;
+        for (let i = 0; i < arr.length; i++) {
+            parseFloat(arr[i])<parseFloat(minNum) ? minNum =arr[i] : null;
+        };
+
+        return minNum;
+    }
+    // var xAxisDat = ['1号']
+    // var valueDat = [15];
+    // var valueDat2 = [25];
+    // var valueDat3 = [35];
+    // setXAxisData(xAxisDat);
+    // setLowValueDate(valueDat);
+    // setMidValueDate(valueDat2);
+    // setHigValueDate(valueDat3);
+    // update(xAxisDat)
+</script>
+</body>
+</html>

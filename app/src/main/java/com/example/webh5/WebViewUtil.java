@@ -76,25 +76,14 @@ public class WebViewUtil {
     public static void loadLine(WebView mWebView,String xAxis,String value) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mWebView.evaluateJavascript("setXAxisData([" + xAxis + "])", new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {
+            mWebView.evaluateJavascript("setXAxisData([" + xAxis + "])", value1 -> {
 
-                }
             });
+            mWebView.evaluateJavascript("setValueDate([" + value + "])", value12 -> {
 
-
-            mWebView.evaluateJavascript("setValueDate([" + value + "])", new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {
-
-                }
             });
-            mWebView.evaluateJavascript("update()", new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String s) {
+            mWebView.evaluateJavascript("update()", s -> {
 
-                }
             });
         }
     }

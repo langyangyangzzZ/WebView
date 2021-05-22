@@ -2,8 +2,10 @@ package com.example.webh5;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private StringBuffer value1;
     private StringBuffer value2;
     private StringBuffer value3;
-    private FrameLayout frameLayout,frameLayout2;
+    private FrameLayout frameLayout, frameLayout2;
     private StringBuffer value;
 
     @Override
@@ -35,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<String> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            list.add((i+1)+"号");
+            list.add((i + 1) + "号");
         }
-
+        //三条图
         setlineData1(list);
+        //一条图
         setlineData2(list);
     }
+
 
     private Random mRandom = new Random();
 
@@ -75,12 +79,11 @@ public class MainActivity extends AppCompatActivity {
             value3.append("'");
         }
         initWeb("file:///android_asset/echartMoreLineStyle.html");
-//        initWeb("http://www.baidu.com");
     }
 
     private void initWeb(String url) {
         AgentWeb mAgentWeb = AgentWeb.with(this)
-                .setAgentWebParent(frameLayout, new LinearLayout.LayoutParams(-1, -1))
+                .setAgentWebParent(frameLayout, new FrameLayout.LayoutParams(-1, -1))
                 .closeIndicator()
                 .setWebViewClient(new MyWebViewClient(xAxis, value1, value2, value3, (view, xAxis, v1, v2, v3) ->
                         WebViewUtil.getInstance().loadLineSurveyStatistics(view, xAxis.toString(), v1.toString(), v2.toString(), v3.toString())))
@@ -96,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 .createAgentWeb()
                 .ready()
                 .get();
-//                .go("http://www.baidu.com");
 
         mAgentWeb.getAgentWebSettings().getWebSettings().setJavaScriptEnabled(true);
         mAgentWeb.clearWebCache();
@@ -127,10 +129,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void initWeb2(String url) {
         AgentWeb mAgentWeb = AgentWeb.with(this)
-                .setAgentWebParent(frameLayout2, new LinearLayout.LayoutParams(-1, -1))
+                .setAgentWebParent(frameLayout2, new FrameLayout.LayoutParams(-1, -1))
                 .closeIndicator()
-                .setWebViewClient(new MyWebViewClient(xAxis, value, (view, xAxis, value) ->
-                        WebViewUtil.getInstance().loadLine(view, xAxis.toString(), value.toString())))
+//                .setWebViewClient(new MyWebViewClient(xAxis, value, (view, xAxis, value) ->
+//                        WebViewUtil.getInstance().loadLine(view, xAxis.toString(), value.toString())))
+                .setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        super.onPageFinished(view, url);
+                        WebViewUtil.getInstance().loadLine(view, xAxis.toString(), value1.toString());
+                    }
+                })
+
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)//打开其他应用时，弹窗咨询用户是否前往其他应用
                 .createAgentWeb()
@@ -139,5 +149,27 @@ public class MainActivity extends AppCompatActivity {
         mAgentWeb.getAgentWebSettings().getWebSettings().setJavaScriptEnabled(true);
         mAgentWeb.clearWebCache();
         mAgentWeb.getUrlLoader().loadUrl(url);
+    }
+
+    String htmlData = "<p style=\"text-align: center;\"><span style=\"font-size:18px\"><strong>帮助说明</strong></span></p>\n" +
+            "\n" +
+            "<p style=\"text-align: justify;\"><span style=\"font-size:18px\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我是 html 标签内容</span>\n" +
+            "</p>\n" +
+            "\n" +
+            "<p style=\"text-align: justify;\"><span style=\"font-size:18px\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 😛😛😛😛</span>\n" +
+            "</p>\n" +
+            "\n" +
+            "\n" +
+            "<p style=\"text-align:center\"><img alt=\"\" src=\"https://alifei02.cfp.cn/creative/vcg/800/new/VCG211147957933.jpg\"\n" +
+            "                                  width=\"100%\"/></p>\n" +
+            "\n" +
+            "<p><span style=\"font-size:18px\"><span style=\"color:red\">注</span>:记得点赞评论收藏哦~~&nbsp;</span></p>";
+
+    public void OnHtmlButtonClick(View view) {
+        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+//        intent.putExtra("url", "http://www.baidu.com");
+//        intent.putExtra("url", "file:///android_asset/help.html");
+        intent.putExtra("htmlData", htmlData);
+        startActivity(intent);
     }
 }

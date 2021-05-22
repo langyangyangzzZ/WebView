@@ -14,40 +14,18 @@ import com.just.agentweb.WebViewClient;
  */
 public class MyWebViewClient extends WebViewClient {
 
-    //三种线条
-    private StringBuffer xAxis;
-    private StringBuffer value1;
-    private StringBuffer value2;
-    private StringBuffer value3;
-    private ClientCallback clientCallback1;
-
     //一种线条
     private StringBuffer value;
     private ClientCallback2 clientCallback2;
-
-    public MyWebViewClient(StringBuffer xAxis, StringBuffer value1, StringBuffer value2, StringBuffer value3, ClientCallback callback) {
-        this.xAxis = xAxis;
-        this.value1 = value1;
-        this.value2 = value2;
-        this.value3 = value3;
-        clientCallback1 = callback;
-    }
 
     public MyWebViewClient(StringBuffer xAxis, StringBuffer value, ClientCallback2 callback) {
         this.xAxis = xAxis;
         this.value = value;
         this.clientCallback2 = callback;
     }
-
-    public interface ClientCallback {
-        // 3 条数据
-        void refreshChart(WebView view, StringBuffer xAxis, StringBuffer value1, StringBuffer value2, StringBuffer value3);
-    }
-
     public interface ClientCallback2 {
         //普通线性统计表 1 条数据
         void refreshChart(WebView view, StringBuffer xAxis, StringBuffer value);
-
     }
 
     @Override
@@ -58,5 +36,25 @@ public class MyWebViewClient extends WebViewClient {
         } else if (clientCallback2 != null) {
             clientCallback2.refreshChart(view, xAxis, value);
         }
+    }
+
+
+    //三种线条
+    private StringBuffer xAxis;
+    private StringBuffer value1;
+    private StringBuffer value2;
+    private StringBuffer value3;
+    private ClientCallback clientCallback1;
+
+    public MyWebViewClient(StringBuffer xAxis, StringBuffer value1, StringBuffer value2, StringBuffer value3, ClientCallback callback) {
+        this.xAxis = xAxis;
+        this.value1 = value1;
+        this.value2 = value2;
+        this.value3 = value3;
+        clientCallback1 = callback;
+    }
+    public interface ClientCallback {
+        // 3 条数据
+        void refreshChart(WebView view, StringBuffer xAxis, StringBuffer value1, StringBuffer value2, StringBuffer value3);
     }
 }

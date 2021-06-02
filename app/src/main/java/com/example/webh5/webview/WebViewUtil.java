@@ -1,10 +1,8 @@
-package com.example.webh5;
+package com.example.webh5.webview;
 
 import android.os.Build;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
-
-import androidx.annotation.RequiresApi;
 
 /**
  * @Package: com.example.webh5

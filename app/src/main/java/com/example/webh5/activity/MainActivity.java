@@ -1,18 +1,19 @@
-package com.example.webh5;
+package com.example.webh5.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
+import com.example.webh5.Image_click.ImageActivity;
+import com.example.webh5.R;
+import com.example.webh5.webview.MyWebViewClient;
+import com.example.webh5.webview.WebViewUtil;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.DefaultWebClient;
-import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebViewClient;
 
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         setlineData1(list);
         //一条图
         setlineData2(list);
+
+
     }
 
 
@@ -171,5 +174,9 @@ public class MainActivity extends AppCompatActivity {
 //        intent.putExtra("url", "file:///android_asset/help.html");
         intent.putExtra("htmlData", htmlData);
         startActivity(intent);
+    }
+
+    public void onImageClick(View view) {
+        startActivity(new Intent(this, ImageActivity.class));
     }
 }

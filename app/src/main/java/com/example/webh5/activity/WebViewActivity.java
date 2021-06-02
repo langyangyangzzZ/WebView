@@ -1,4 +1,4 @@
-package com.example.webh5;
+package com.example.webh5.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.webh5.R;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.DefaultWebClient;
 
@@ -58,8 +59,6 @@ public class WebViewActivity extends AppCompatActivity {
             //解析 html 文件
             mAgentWeb.getUrlLoader().loadData(url,"text/html", "utf-8");
         }
-
-
     }
 
 

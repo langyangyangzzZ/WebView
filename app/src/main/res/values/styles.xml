@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomToTopAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_alpha_show</item>
+        <item name="android:windowExitAnimation">@anim/dialog_alpha_hide</item>
+    </style>
+</resources>

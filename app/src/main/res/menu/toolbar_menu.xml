@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+    ifRoom 表示在屏幕空间足够的情况下显示在Toolbar中，不够的话就显示在菜单中,
+            如果设置该属性,长按时弹出对应的文字
+    never 表示永远不显示在Toolbar中，而是一直显示在菜单中   (默认)
+    always 表示永远显示在Toolbar中，如果屏幕空间不够则不显示
+
+    声明:Toolbar中的action按钮只会显示图标，菜单中的action按钮只会显示文字。
+
+    -->
+    <item
+        android:id="@+id/menu_1"
+        android:title="正常字体"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_2"
+        android:title="略大字体"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_3"
+        android:title="巨大字体">
+
+    </item>
+</menu>
